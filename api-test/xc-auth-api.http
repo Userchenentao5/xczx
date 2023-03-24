@@ -1,0 +1,14 @@
+### 认证码
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=authorization_code&code=ne4hDh&redirect_uri=http://www.xuecheng-plus.com
+
+### 密码模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username={"username":"stu2","password":"111111","authType":"password"}&password=111111
+
+### 测试服务
+GET {{content_host}}/content/course/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzMSIsInh1ZWNoZW5nLXBsdXMiXSwidXNlcl9uYW1lIjoiemhhbmdzYW4iLCJzY29wZSI6WyJhbGwiXSwiZXhwIjoxNjc3MDc4ODQzLCJhdXRob3JpdGllcyI6WyJwMSJdLCJqdGkiOiJkODM2MDA3Zi0xZjFlLTQ1ZTYtODU1MS01NmQzMTI4ZTc4M2IiLCJjbGllbnRfaWQiOiJYY1dlYkFwcCJ9.w1keMFjsllH2ixRTC85L5SyT6aCD1FYVi_8hYIcUXc0
+
+
+### 网关认证
+GET {{gateway_host}}/content/course/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzMSIsInh1ZWNoZW5nLXBsdXMiXSwidXNlcl9uYW1lIjoie1wiY3JlYXRlVGltZVwiOlwiMjAyMi0wOS0yOFQwODozMjowM1wiLFwiaWRcIjpcIjUxXCIsXCJuYW1lXCI6XCLlrabnlJ8yXCIsXCJzZXhcIjpcIjFcIixcInN0YXR1c1wiOlwiMVwiLFwidXNlcm5hbWVcIjpcInN0dTJcIixcInV0eXBlXCI6XCIxMDEwMDFcIn0iLCJzY29wZSI6WyJhbGwiXSwiZXhwIjoxNjc3MDgyNjY4LCJhdXRob3JpdGllcyI6WyJ0ZXN0Il0sImp0aSI6IjM0M2IxNzVmLWFiMjItNDA3ZS04MTFkLWVhOTA1ODA1YWQxNyIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.cgz0vm7VsX0AqqwSW23Z9ErxkVTbkNMac8R8nYuQplE

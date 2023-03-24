@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xuecheng.content.mapper.TeachplanMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xuecheng.content.model.po.Teachplan">
+        <id column="id" property="id" />
+        <result column="pname" property="pname" />
+        <result column="parentid" property="parentid" />
+        <result column="grade" property="grade" />
+        <result column="media_type" property="mediaType" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="description" property="description" />
+        <result column="timelength" property="timelength" />
+        <result column="orderby" property="orderby" />
+        <result column="course_id" property="courseId" />
+        <result column="course_pub_id" property="coursePubId" />
+        <result column="status" property="status" />
+        <result column="is_preview" property="isPreview" />
+        <result column="create_date" property="createDate" />
+        <result column="change_date" property="changeDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, pname, parentid, grade, media_type, start_time, end_time, description, timelength, orderby, course_id, course_pub_id, status, is_preview, create_date, change_date
+    </sql>
+
+    <!-- 课程分类树型结构查询映射结果 -->
+    <resultMap id="treeNodeResultMap" type="com.xuecheng.content.model.dto.TeachplanDto">
+        <!-- 一级数据映射 -->
+        <id     column="tp1_id"        property="id" />
+        <result column="tp1_pname"      property="pname" />
+        <result column="tp1_parentid"     property="parentid" />
+        <result column="tp1_grade"  property="grade" />
+        <result column="tp1_mediaType"   property="mediaType" />
+        <result column="tp1_stratTime"   property="startTime" />
+        <result column="tp1_endTime"   property="endTime" />
+        <result column="tp1_orderby"   property="orderby" />
+        <result column="tp1_courseId"   property="courseId" />
+        <result column="tp1_coursePubId"   property="coursePubId" />
+        <!-- 一级中包含多个二级数据 -->
+        <collection property="teachPlanTreeNodes" ofType="com.xuecheng.content.model.dto.TeachplanDto">
+            <!-- 二级数据映射 -->
+            <id     column="tp2_id"        property="id" />
+            <result column="tp2_pname"      property="pname" />
+            <result column="tp2_parentid"     property="parentid" />
+            <result column="tp2_grade"  property="grade" />
+            <result column="tp2_mediaType"   property="mediaType" />
+            <result column="tp2_stratTime"   property="startTime" />
+            <result column="tp2_endTime"   property="endTime" />
+            <result column="tp2_orderby"   property="orderby" />
+            <result column="tp2_courseId"   property="courseId" />
+            <result column="tp2_coursePubId"   property="coursePubId" />
+            <!-- 一对一映射-->
+            <association property="teachplanMedia" javaType="com.xuecheng.content.model.po.TeachplanMedia">
+                <result column="teachplanMeidaId"   property="id" />
+                <result column="mediaFilename"   property="mediaFilename" />
+                <result column="mediaId"   property="mediaId" />
+                <result column="tp2_id"   property="teachplanId" />
+                <result column="tp2_courseId"   property="courseId" />
+                <result column="tp2_coursePubId"   property="coursePubId" />
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="selectTreeNodes" parameterType="long" resultMap="treeNodeResultMap">
+        select tp1.id            tp1_id,
+               tp1.pname         tp1_pname,
+               tp1.parentid      tp1_parentid,
+               tp1.grade         tp1_grade,
+               tp1.media_type    tp1_mediaType,
+               tp1.start_time    tp1_stratTime,
+               tp1.end_time      tp1_endTime,
+               tp1.orderby       tp1_orderby,
+               tp1.course_id     tp1_courseId,
+               tp1.course_pub_id tp1_coursePubId,
+               tp2.id            tp2_id,
+               tp2.pname         tp2_pname,
+               tp2.parentid      tp2_parentid,
+               tp2.grade         tp2_grade,
+               tp2.media_type    tp2_mediaType,
+               tp2.start_time    tp2_stratTime,
+               tp2.end_time      tp2_endTime,
+               tp2.orderby       tp2_orderby,
+               tp2.course_id     tp2_courseId,
+               tp2.course_pub_id tp2_coursePubId,
+               tm.media_fileName mediaFilename,
+               tm.id             teachplanMeidaId,
+               tm.media_id       mediaId
+        from teachplan tp1
+                 left join teachplan tp2
+                            on tp1.id = tp2.parentid
+                 left join teachplan_media tm
+                           on tp2.id = tm.teachplan_id
+        where tp1.parentid = 0 and tp1.course_id = #{courseId}
+        order by tp1.orderby, tp2.orderby;
+    </select>
+
+</mapper>
